@@ -2,6 +2,7 @@ import os
 import time
 import torch
 import argparse
+import pandas as pd
 
 from model import SASRec
 from utils import *
@@ -31,6 +32,11 @@ args = parser.parse_args()
 # Set device to use MPS if available, otherwise CPU
 args.device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
 
+# Load the preprocessed H&M data
+data_path = f"{args.dataset}_data.pkl"  # Specify the path to your preprocessed data file
+data = pd.read_pickle(data_path)
+user_train, user_valid, user_test = data['user_train'], data['user_valid'], data['user_test']
+usernum, itemnum = len(user_train), max(max(seq) for seq in user_train.values()) + 1
 
 if not os.path.isdir(args.dataset + '_' + args.train_dir):
     os.makedirs(args.dataset + '_' + args.train_dir)
