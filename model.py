@@ -33,9 +33,9 @@ class SASRec(torch.nn.Module):
 
         # TODO: loss += args.l2_emb for regularizing embedding vectors during training
         # https://stackoverflow.com/questions/42704283/adding-l1-l2-regularization-in-pytorch
-        self.item_emb = torch.nn.Embedding(self.item_num+1, args.hidden_units, padding_idx=0)
-        self.pos_emb = torch.nn.Embedding(args.maxlen+1, args.hidden_units, padding_idx=0)
-        self.emb_dropout = torch.nn.Dropout(p=args.dropout_rate)
+        self.item_emb = torch.nn.Embedding(self.item_num+1, args.hidden_units, padding_idx=0).to(self.dev)
+        self.pos_emb = torch.nn.Embedding(args.maxlen+1, args.hidden_units, padding_idx=0).to(self.dev)
+        self.emb_dropout = torch.nn.Dropout(p=args.dropout_rate).to(self.dev)
 
         self.attention_layernorms = torch.nn.ModuleList() # to be Q for self-attention
         self.attention_layers = torch.nn.ModuleList()

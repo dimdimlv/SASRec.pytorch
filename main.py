@@ -23,11 +23,15 @@ parser.add_argument('--num_epochs', default=1000, type=int)
 parser.add_argument('--num_heads', default=1, type=int)
 parser.add_argument('--dropout_rate', default=0.2, type=float)
 parser.add_argument('--l2_emb', default=0.0, type=float)
-parser.add_argument('--device', default='cuda', type=str)
+parser.add_argument('--device', default='None', type=str)
 parser.add_argument('--inference_only', default=False, type=str2bool)
 parser.add_argument('--state_dict_path', default=None, type=str)
 
 args = parser.parse_args()
+# Set device to use MPS if available, otherwise CPU
+args.device = torch.device("mps") if torch.backends.mps.is_available() else torch.device("cpu")
+
+
 if not os.path.isdir(args.dataset + '_' + args.train_dir):
     os.makedirs(args.dataset + '_' + args.train_dir)
 with open(os.path.join(args.dataset + '_' + args.train_dir, 'args.txt'), 'w') as f:
